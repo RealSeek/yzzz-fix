@@ -22,8 +22,5 @@ desktop.ini
 # Misc
 *.log
 
-# Dependencies (third-party jars)
-libs/
-
 # Decompiled/reference classes
 org/
