@@ -1,0 +1,115 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+version = mod_version
+group = mod_group_id
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+mixin {
+    add sourceSets.main, "yzzz_fix.refmap.json"
+    config "yzzz_fix.mixins.json"
+}
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=yzzz_fix.mixins.json"
+            mods {
+                yzzz_fix {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=yzzz_fix.mixins.json"
+            mods {
+                yzzz_fix {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net/' }
+    maven {
+        name = 'Jared'
+        url = 'https://maven.blamejared.com'
+    }
+    flatDir { dirs 'libs' }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compileOnly fileTree(
+            dir: 'libs',
+            include: ['*.jar'],
+            exclude: [
+                    'Nameless Trinkets-1.20.1-1.7.8.jar',
+                    'curios-forge-5.14.1+1.20.1.jar',
+                    'reliquary-1.20.1-2.0.45.1248.jar',
+                    'Lychee-1.20.1-forge-5.1.14.jar'
+            ]
+    )
+    compileOnly fg.deobf(files('libs/Nameless Trinkets-1.20.1-1.7.8.jar'))
+    compileOnly fg.deobf(files('libs/curios-forge-5.14.1+1.20.1.jar'))
+    compileOnly fg.deobf(files('libs/reliquary-1.20.1-2.0.45.1248.jar'))
+    compileOnly fg.deobf(files('libs/Lychee-1.20.1-forge-5.1.14.jar'))
+    compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+// Suppress Mixin AP target validator errors for mod classes not on compile classpath.
+// All mod-class mixins use remap=false; runtime MixinPlugin handles target validation.
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-proc:none']
+}
+
+processResources {
+    inputs.property "mod_version", mod_version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+
+    filesMatching("META-INF/mods.toml") {
+        expand(
+                "mod_version": mod_version,
+                "mod_id": mod_id,
+                "mod_name": mod_name
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : mod_id,
+                "Specification-Vendor"    : "RealSeek",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "RealSeek",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "yzzz_fix.mixins.json"
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')

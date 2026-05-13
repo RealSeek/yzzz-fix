@@ -1,0 +1,48 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.realseek.yzzzfix.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "yzzz_fix.refmap.json",
+  "plugin": "me.realseek.yzzzfix.mixin.YzzzFixMixinPlugin",
+  "mixins": [
+    "forbidden_arcanus.HephaestusForgeBlockMixin",
+    "immortalers_delight.EnchantalCoolerSerializerMixin",
+    "irons_spellbooks.AbstractMagicProjectileMixin",
+    "irons_spellbooks.LurkerRingCooldownMixin",
+    "revelationfix.ClassHandlerMixin",
+    "revelationfix.EntityActuallyHurtMixin",
+    "mokels.MokelsBossMantydModMixin",
+    "cy3_core.BasicAdaptationMixin",
+    "cy3_core.EntityMaidMixin",
+    "cy3_core.WarMageRingPreMixin",
+    "cy3_core.WarMageRingPostMixin",
+    "aetherworks.AetheriometerChunkCapabilityMixin",
+    "apotheosis_gateway.BossWaveEntityMixin",
+    "reliquary_lyssa.RodOfLyssaItemMixin",
+    "reliquary_lyssa.LyssaHookMixin",
+    "null_blockstate.LevelMixin",
+    "ritual_manager_npe.RitualManagerSaveFixMixin",
+    "rough_blade.SummonSwordPROEntityMixin",
+    "illager_additions.BlastionerMarkProjectileMixin",
+    "enigmatic_totem.BetterTotemCompatMixin",
+    "yhc.ServerPlayerMixin",
+    "celestial_ench.DestructionCrackMixin",
+    "celestial_ench.MagicBladeMixin",
+    "celestial_ench.SuppressionBladeMixin",
+    "celestial_ench.TraumaAbsorptionMixin",
+    "celestial_ench.LifeShieldMixin",
+    "celestial_forge.ModifierUtilsMixin",
+    "lychee_offhand.BrushItemMixin",
+    "lychee_offhand.InteractionRecipeModMixin",
+    "endinglib.MobEffectUtilsMixin"
+  ],
+  "client": [
+    "forbidden_arcanus.ForbiddenArcanusJEIPluginMixin",
+    "immortalers_delight.JEIImmortalersDelightPluginMixin",
+    "eidolon_hearts.EidolonHeartsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
