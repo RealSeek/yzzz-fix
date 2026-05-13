@@ -1,6 +1,7 @@
 package me.realseek.yzzzfix.module;
 
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.LoadingModList;
 
 import java.util.List;
 
@@ -40,11 +41,24 @@ public record ModuleDefinition(
     }
 
     public boolean isRuntimeAvailable() {
-        for (String modId : requiredModIds) {
-            if (!ModList.get().isLoaded(modId)) {
-                return false;
+        ModList modList = ModList.get();
+        if (modList != null) {
+            for (String modId : requiredModIds) {
+                if (!modList.isLoaded(modId)) {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+        LoadingModList loadingModList = LoadingModList.get();
+        if (loadingModList != null) {
+            for (String modId : requiredModIds) {
+                if (loadingModList.getModFileById(modId) == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return !requiredModIds.isEmpty() ? false : true;
     }
 }

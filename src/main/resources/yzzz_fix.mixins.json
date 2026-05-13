@@ -35,7 +35,8 @@
     "celestial_forge.ModifierUtilsMixin",
     "lychee_offhand.BrushItemMixin",
     "lychee_offhand.InteractionRecipeModMixin",
-    "endinglib.MobEffectUtilsMixin"
+    "endinglib.MobEffectUtilsMixin",
+    "arkane_domains.UniccProcedureMixin"
   ],
   "client": [
     "forbidden_arcanus.ForbiddenArcanusJEIPluginMixin",
