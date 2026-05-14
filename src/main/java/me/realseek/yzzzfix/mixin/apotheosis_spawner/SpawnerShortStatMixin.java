@@ -2,7 +2,10 @@ package me.realseek.yzzzfix.mixin.apotheosis_spawner;
 
 import dev.shadowsoffire.apotheosis.spawn.spawner.ApothSpawnerTile;
 import net.minecraft.util.Mth;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -10,56 +13,90 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.lang.reflect.Field;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+
 /**
- * 纯 Inject 拦截：完全放弃 Shadow，利用反射强取父类变量
- * 修复了恼鬼刷怪笼最低0变成20的问题
+ * 修复神化（Apotheosis）刷怪笼 ShortStat 的 clamp 逻辑缺陷。
+ *
+ * <p>原始实现中，当恼鬼刷怪笼的 spawnDelay 最小值为 0 时，apply 方法会将其错误地
+ * clamp 到默认最小值 20，导致刷怪间隔无法低于 20 tick。</p>
+ *
+ * <p>本 Mixin 通过反射获取父类 {@code Stat} 的 getter/setter 字段，重新实现 clamp 逻辑：
+ * 使用 {@code Math.min(currentValue, min)} 作为有效最小值，允许数值低于参数指定的 min。</p>
+ *
+ * <p>反射初始化采用 volatile + double-checked locking 保证线程安全。</p>
  */
-@SuppressWarnings({"UnresolvedMixinReference", "unchecked", "rawtypes"})
+@SuppressWarnings({"UnresolvedMixinReference", "unchecked"})
 @Mixin(targets = "dev.shadowsoffire.apotheosis.spawn.modifiers.SpawnerStats$ShortStat", remap = false)
 public abstract class SpawnerShortStatMixin {
 
-    private static Field yzzzFix$getterField = null;
-    private static Field yzzzFix$setterField = null;
+    @Unique
+    private static final Logger yzzzFix$LOGGER = LogManager.getLogger("YzzzFix");
 
+    @Unique
+    private static volatile Field yzzzFix$getterField;
+
+    @Unique
+    private static volatile Field yzzzFix$setterField;
 
     @Inject(
             method = "apply(Ljava/lang/Short;Ljava/lang/Short;Ljava/lang/Short;Ldev/shadowsoffire/apotheosis/spawn/spawner/ApothSpawnerTile;)Z",
             at = @At("HEAD"),
             cancellable = true
     )
-    private void yzzzFix$fixZeroStatClamping(Short value, Short min, Short max, ApothSpawnerTile spawner, CallbackInfoReturnable<Boolean> cir) {
+    private void yzzzFix$fixZeroStatClamping(Short value, Short min, Short max,
+                                             ApothSpawnerTile spawner,
+                                             CallbackInfoReturnable<Boolean> cir) {
         try {
-            if (yzzzFix$getterField == null || yzzzFix$setterField == null) {
-                Class<?> baseClass = this.getClass().getSuperclass(); // 获取父类 Base
-                for (Field f : baseClass.getDeclaredFields()) {
-                    if (f.getType() == Function.class) {
-                        f.setAccessible(true);
-                        yzzzFix$getterField = f;
-                    } else if (f.getType() == BiConsumer.class) {
-                        f.setAccessible(true);
-                        yzzzFix$setterField = f;
-                    }
-                }
-            }
+            yzzzFix$initFieldsIfNeeded();
 
-            if (yzzzFix$getterField == null || yzzzFix$setterField == null) {
+            Field getterField = yzzzFix$getterField;
+            Field setterField = yzzzFix$setterField;
+            if (getterField == null || setterField == null) {
                 return;
             }
 
-            Function getter = (Function) yzzzFix$getterField.get(this);
-            BiConsumer setter = (BiConsumer) yzzzFix$setterField.get(this);
-            short old = ((Short) getter.apply(spawner)).shortValue();
+            Function<ApothSpawnerTile, Short> getter =
+                    (Function<ApothSpawnerTile, Short>) getterField.get(this);
+            BiConsumer<ApothSpawnerTile, Short> setter =
+                    (BiConsumer<ApothSpawnerTile, Short>) setterField.get(this);
 
-            int effectiveMin = Math.min((int) old, (int) min);
+            short oldValue = getter.apply(spawner);
+            int effectiveMin = Math.min((int) oldValue, (int) min);
+            short newValue = (short) Mth.clamp(oldValue + value, effectiveMin, (int) max);
 
-            short newValue = (short) Mth.clamp(old + value, effectiveMin, (int) max);
             setter.accept(spawner, newValue);
-            short currentAfter = ((Short) getter.apply(spawner)).shortValue();
-            cir.setReturnValue(old != currentAfter);
+            short currentValue = getter.apply(spawner);
+            cir.setReturnValue(oldValue != currentValue);
 
-        } catch (Exception e) {
-            System.out.println("[YzzzFix] 神化刷怪笼 Mixin 反射异常，放行原版逻辑: " + e.getMessage());
-            e.printStackTrace();
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            yzzzFix$LOGGER.warn("[YzzzFix] Apotheosis spawner ShortStat mixin reflection failed, falling back to original logic.", e);
+        }
+    }
+
+    @Unique
+    private static void yzzzFix$initFieldsIfNeeded() throws ReflectiveOperationException {
+        if (yzzzFix$getterField != null && yzzzFix$setterField != null) {
+            return;
+        }
+        synchronized (SpawnerShortStatMixin.class) {
+            if (yzzzFix$getterField != null && yzzzFix$setterField != null) {
+                return;
+            }
+            Class<?> statClass = Class.forName(
+                    "dev.shadowsoffire.apotheosis.spawn.modifiers.SpawnerStats$Stat");
+            Field getter = null;
+            Field setter = null;
+            for (Field f : statClass.getDeclaredFields()) {
+                if (f.getType() == Function.class) {
+                    f.setAccessible(true);
+                    getter = f;
+                } else if (f.getType() == BiConsumer.class) {
+                    f.setAccessible(true);
+                    setter = f;
+                }
+            }
+            yzzzFix$getterField = getter;
+            yzzzFix$setterField = setter;
         }
     }
 }
