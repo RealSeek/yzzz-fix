@@ -38,7 +38,9 @@
     "revelationfix.EntityActuallyHurtMixin",
     "ritual_manager_npe.RitualManagerSaveFixMixin",
     "rough_blade.SummonSwordPROEntityMixin",
-    "yhc.ServerPlayerMixin"
+    "yhc.ServerPlayerMixin",
+    "aquamirae.PiratePouchItemMixin",
+    "aquamirae.TreasurePouchItemMixin"
   ],
   "client": [
     "apotheosis_spawner.LevelRendererMixin",
