@@ -10,6 +10,8 @@
     "apotheosis_gateway.BossWaveEntityMixin",
     "apotheosis_spawner.ApothSpawnerTileMixin",
     "apotheosis_spawner.SpawnerShortStatMixin",
+    "aquamirae.PiratePouchItemMixin",
+    "aquamirae.TreasurePouchItemMixin",
     "arkane_domains.UniccProcedureMixin",
     "celestial_ench.DestructionCrackMixin",
     "celestial_ench.LifeShieldMixin",
@@ -38,9 +40,7 @@
     "revelationfix.EntityActuallyHurtMixin",
     "ritual_manager_npe.RitualManagerSaveFixMixin",
     "rough_blade.SummonSwordPROEntityMixin",
-    "yhc.ServerPlayerMixin",
-    "aquamirae.PiratePouchItemMixin",
-    "aquamirae.TreasurePouchItemMixin"
+    "yhc.ServerPlayerMixin"
   ],
   "client": [
     "apotheosis_spawner.LevelRendererMixin",

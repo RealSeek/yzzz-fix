@@ -92,7 +92,8 @@ public final class ModuleRegistry {
                     List.of("lychee"),
                     List.of("snownee.lychee.interaction.InteractionRecipeMod"),
                     LycheeOffhandModule.INSTANCE
-            )
+            ),
+            module("aquamirae", "Aquamirae Pouch Fix", "aquamirae_pouch_fix", List.of("aquamirae"))
     );
 
     private ModuleRegistry() {
