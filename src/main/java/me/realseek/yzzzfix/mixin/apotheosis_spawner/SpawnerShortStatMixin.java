@@ -33,6 +33,9 @@ public abstract class SpawnerShortStatMixin {
     private static final Logger yzzzFix$LOGGER = LogManager.getLogger("YzzzFix");
 
     @Unique
+    private static final Object yzzzFix$FIELD_INIT_LOCK = new Object();
+
+    @Unique
     private static volatile Field yzzzFix$getterField;
 
     @Unique
@@ -74,29 +77,32 @@ public abstract class SpawnerShortStatMixin {
     }
 
     @Unique
-    private static void yzzzFix$initFieldsIfNeeded() throws ReflectiveOperationException {
+    private void yzzzFix$initFieldsIfNeeded() {
         if (yzzzFix$getterField != null && yzzzFix$setterField != null) {
             return;
         }
-        synchronized (SpawnerShortStatMixin.class) {
+        synchronized (yzzzFix$FIELD_INIT_LOCK) {
             if (yzzzFix$getterField != null && yzzzFix$setterField != null) {
                 return;
             }
-            Class<?> statClass = Class.forName(
-                    "dev.shadowsoffire.apotheosis.spawn.modifiers.SpawnerStats$Stat");
-            Field getter = null;
-            Field setter = null;
-            for (Field f : statClass.getDeclaredFields()) {
-                if (f.getType() == Function.class) {
-                    f.setAccessible(true);
-                    getter = f;
-                } else if (f.getType() == BiConsumer.class) {
-                    f.setAccessible(true);
-                    setter = f;
+            try {
+                Class<?> statClass = this.getClass().getSuperclass();
+                Field getter = null;
+                Field setter = null;
+                for (Field f : statClass.getDeclaredFields()) {
+                    if (f.getType() == Function.class) {
+                        f.setAccessible(true);
+                        getter = f;
+                    } else if (f.getType() == BiConsumer.class) {
+                        f.setAccessible(true);
+                        setter = f;
+                    }
                 }
+                yzzzFix$getterField = getter;
+                yzzzFix$setterField = setter;
+            } catch (Exception e) {
+                yzzzFix$LOGGER.warn("[YzzzFix] Failed to initialize ShortStat reflection fields.", e);
             }
-            yzzzFix$getterField = getter;
-            yzzzFix$setterField = setter;
         }
     }
 }
