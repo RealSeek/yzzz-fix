@@ -9,6 +9,7 @@
     "aetherworks.AetheriometerChunkCapabilityMixin",
     "apotheosis_gateway.BossWaveEntityMixin",
     "apotheosis_spawner.ApothSpawnerTileMixin",
+    "apotheosis_spawner.MowzieEntityMixin",
     "apotheosis_spawner.SpawnerShortStatMixin",
     "aquamirae.PiratePouchItemMixin",
     "aquamirae.TreasurePouchItemMixin",
