@@ -33,6 +33,8 @@
     "lychee_offhand.BrushItemMixin",
     "lychee_offhand.InteractionRecipeModMixin",
     "mokels.MokelsBossMantydModMixin",
+    "moonstone.BloodEntityMixin",
+    "moonstone.BloodMagicBoxMixin",
     "null_blockstate.LevelMixin",
     "reliquary_lyssa.LyssaHookMixin",
     "reliquary_lyssa.RodOfLyssaItemMixin",
