@@ -6,7 +6,6 @@ import me.realseek.yzzzfix.module.eidolon_jei.EidolonJeiModule;
 import me.realseek.yzzzfix.module.forbidden_arcanus.ForbiddenArcanusModule;
 import me.realseek.yzzzfix.module.immortalers_delight.ImmortalersDelightModule;
 import me.realseek.yzzzfix.module.cy3_core.CY3CoreModule;
-import me.realseek.yzzzfix.module.enigmaticaddons.EnigmaticAddonsModule;
 import me.realseek.yzzzfix.module.lychee_offhand.LycheeOffhandModule;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -101,8 +100,6 @@ public final class ModuleRegistry {
             module("moonstone", "Moonstone Fix", "moonstone_fix", List.of("moonstone")),
             module("slashbladeresharped", "SlashBlade SSS Fix", "slashbladeresharped_fix", List.of("slashblade")),
             module("magnet_fix", "Magnet Throw Filter", "magnet_fix", List.of()),
-            module("enigmaticaddons", "Enigmatic Addons Fix", "enigmaticaddons_fix", List.of("enigmaticlegacy"),
-                    List.of("auviotre.enigmatic.addon.proxy.ClientProxy"), EnigmaticAddonsModule.INSTANCE),
             module(
                     "farmingforblockheads",
                     "Farming for Blockheads Fix",
@@ -140,7 +137,9 @@ public final class ModuleRegistry {
             module("mutant_monsters", "Mutant Monsters NPE Fix", "mutant_monsters_fix", List.of("mutantmonsters")),
             module("ancient_ones", "Ancient Ones NPE Fix", "ancient_ones_fix", List.of("ancient_ones")),
             module("majruszsdifficulty", "Majrusz's Difficulty Fix", "majruszsdifficulty_fix", List.of("majruszsdifficulty")),
-            module("sunspirit", "Sun Spirit Balance Fix", "sunspirit_fix", List.of("aether"))
+            module("sunspirit", "Sun Spirit Balance Fix", "sunspirit_fix", List.of("aether")),
+            module("crockpot", "Crockpot Double Crop Fix", "crockpot_fix", List.of("crockpot")),
+            module("gateways", "Gateways Wave Entity Fix", "gateways_fix", List.of("gateways"))
             );
 
     private ModuleRegistry() {

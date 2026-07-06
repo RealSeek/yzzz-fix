@@ -23,11 +23,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.*;
 
 /**
- * 移除 JEI 填充时的 NBT 匹配限制。
+ * 对 JEI 填充做条件式 NBT 匹配。
  *
- * <p>原版 IngredientTracker 使用含 NBT 的 ItemStackKey 作为 Map key，
- * 并通过 IComparer.COMPARE_NBT 比较物品，导致同一物品不同 NBT 无法匹配，
- * JEI 填充失败。</p>
+ * <p>配方候选带 NBT 时精确匹配；候选不带 NBT 时允许同物品不同 NBT 参与普通配方。</p>
  */
 @Mixin(value = IngredientTracker.class, remap = false)
 public abstract class IngredientTrackerMixin {
@@ -41,18 +39,36 @@ public abstract class IngredientTrackerMixin {
 
     @Unique
     private static boolean yzzzfix$matches(ItemStack a, ItemStack b) {
-        return API.instance().getComparer().isEqual(a, b, 0);
+        return API.instance().getComparer().isEqual(a, b, yzzzfix$comparisonFlags(a));
     }
 
     @Unique
-    private static ItemStackKey yzzzfix$keyOf(ItemStack stack) {
+    private static ItemStackKey yzzzfix$keyWithoutNbt(ItemStack stack) {
         ItemStack copy = stack.copy();
         copy.setTag(null);
         return new ItemStackKey(copy);
     }
 
+    @Unique
+    private static int yzzzfix$comparisonFlags(ItemStack recipeStack) {
+        return yzzzfix$requiresNbt(recipeStack) ? IComparer.COMPARE_NBT : 0;
+    }
+
+    @Unique
+    private static boolean yzzzfix$requiresNbt(ItemStack stack) {
+        return stack != null && stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty();
+    }
+
+    @Unique
+    private static void yzzzfix$mergeAvailable(Map<ItemStackKey, Integer> map, ItemStack stack, int count) {
+        map.merge(new ItemStackKey(stack.copy()), count, Integer::sum);
+        if (yzzzfix$requiresNbt(stack)) {
+            map.merge(yzzzfix$keyWithoutNbt(stack), count, Integer::sum);
+        }
+    }
+
     /**
-     * @reason 存储物品时剥离 NBT，使 storedItems/patternItems 的 key 不含 NBT。
+     * @reason 同时保存精确 key 和无 NBT fallback key，兼顾 NBT 配方和普通配方。
      */
     @Overwrite
     public void addStack(ItemStack stack) {
@@ -63,11 +79,11 @@ public abstract class IngredientTrackerMixin {
             ICraftingPattern pattern = PatternItem.fromCache(Minecraft.getInstance().level, stack);
             if (pattern.isValid()) {
                 for (ItemStack outputStack : pattern.getOutputs()) {
-                    patternItems.merge(yzzzfix$keyOf(outputStack), 1, Integer::sum);
+                    yzzzfix$mergeAvailable(patternItems, outputStack, 1);
                 }
             }
         } else {
-            storedItems.merge(yzzzfix$keyOf(stack), stack.getCount(), Integer::sum);
+            yzzzfix$mergeAvailable(storedItems, stack, stack.getCount());
         }
     }
 
@@ -142,7 +158,7 @@ public abstract class IngredientTrackerMixin {
     }
 
     /**
-     * @reason 移除 checkStack 中 isEqual 的 NBT 比较标志。
+     * @reason 根据配方候选是否带 NBT 决定是否启用精确 NBT 比较。
      */
     @Redirect(
             method = "checkStack",
@@ -154,6 +170,6 @@ public abstract class IngredientTrackerMixin {
             remap = false
     )
     private boolean yzzzfix$redirectIsEqual(IComparer comparer, ItemStack a, ItemStack b, int flags) {
-        return comparer.isEqual(a, b, flags & ~IComparer.COMPARE_NBT);
+        return comparer.isEqual(a, b, yzzzfix$comparisonFlags(a));
     }
 }

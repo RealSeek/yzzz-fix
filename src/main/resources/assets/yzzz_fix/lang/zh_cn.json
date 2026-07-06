@@ -1,4 +1,6 @@
 {
   "yzzzfix.elementalcombat.tooltip.attack": "攻击:",
-  "yzzzfix.elementalcombat.tooltip.defense": "防御:"
+  "yzzzfix.elementalcombat.tooltip.defense": "防御:",
+  "tooltip.yzzz_fix.ftbquests.loading": "FTB Quests 数据正在同步",
+  "tooltip.yzzz_fix.ftbquests.wait": "请稍等片刻后再查看任务属性"
 }

@@ -6,14 +6,14 @@ import com.refinedmods.refinedstorage.api.util.IComparer;
 import com.refinedmods.refinedstorage.apiimpl.network.grid.CraftingGridBehavior;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * 移除 onRecipeTransfer 中的 NBT 匹配限制。
+ * 只在配方候选不带 NBT 时放宽 onRecipeTransfer 的 NBT 匹配。
  *
- * <p>原版从 RS 网络提取物品和从玩家背包查找物品时使用 COMPARE_NBT，
- * 导致不同 NBT 的同类物品无法匹配，JEI 填充到合成台失败。</p>
+ * <p>配方候选带 NBT 时保留精确匹配，避免拿错特殊物品。</p>
  */
 @Mixin(value = CraftingGridBehavior.class, remap = false)
 public class CraftingGridBehaviorMixin {
@@ -32,7 +32,7 @@ public class CraftingGridBehaviorMixin {
             INetwork network,
             ItemStack stack, int size, int flags, Action action
     ) {
-        return network.extractItem(stack, size, flags & ~IComparer.COMPARE_NBT, action);
+        return network.extractItem(stack, size, yzzzfix$recipeFlags(stack, flags), action);
     }
 
     @Redirect(
@@ -48,6 +48,16 @@ public class CraftingGridBehaviorMixin {
             com.refinedmods.refinedstorage.api.util.IComparer comparer,
             ItemStack a, ItemStack b, int flags
     ) {
-        return comparer.isEqual(a, b, flags & ~IComparer.COMPARE_NBT);
+        return comparer.isEqual(a, b, yzzzfix$recipeFlags(a, flags));
+    }
+
+    @Unique
+    private static int yzzzfix$recipeFlags(ItemStack recipeStack, int flags) {
+        return yzzzfix$requiresNbt(recipeStack) ? flags | IComparer.COMPARE_NBT : flags & ~IComparer.COMPARE_NBT;
+    }
+
+    @Unique
+    private static boolean yzzzfix$requiresNbt(ItemStack stack) {
+        return stack != null && stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty();
     }
 }

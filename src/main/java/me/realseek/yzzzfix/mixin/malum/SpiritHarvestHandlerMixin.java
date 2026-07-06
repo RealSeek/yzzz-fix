@@ -2,7 +2,6 @@ package me.realseek.yzzzfix.mixin.malum;
 
 import com.sammy.malum.core.handlers.SpiritHarvestHandler;
 import com.sammy.malum.registry.common.SoundRegistry;
-import me.realseek.yzzzfix.util.InventoryUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -23,7 +22,8 @@ import java.util.UUID;
  * 移除 Malum 精魂实体生成，改为直接向玩家（或仆从主人）发放精魂物品。
  *
  * <p>原逻辑通过 {@code createSpiritEntities} 生成追踪实体，
- * 本 Mixin 拦截所有调用，将精魂物品直接放入玩家背包（满时掉落）。
+ * 本 Mixin 拦截所有调用，将精魂物品以掉落物形式生成。
+ * 若触发者为玩家或其仆从，则物品掉落在玩家位置，便于拾取。
  * 兼容车万女仆等通过 {@link OwnableEntity} / {@link TamableAnimal} 追溯主人的仆从。</p>
  */
 @Mixin(value = SpiritHarvestHandler.class, remap = false)
@@ -52,15 +52,14 @@ public abstract class SpiritHarvestHandlerMixin {
                 SoundRegistry.SOUL_SHATTER.get(), SoundSource.PLAYERS, 1.0F, 0.7F + level.random.nextFloat() * 0.4F);
 
         Player player = yzzzfix$resolvePlayer(attacker, level);
+
+        Vec3 dropPos = (player != null) ? player.position() : position;
+
         for (ItemStack stack : spirits) {
             ItemStack copy = stack.copy();
-            if (player != null) {
-                InventoryUtil.giveOrDrop(player, copy);
-            } else {
-                ItemEntity item = new ItemEntity(level, position.x, position.y, position.z, copy);
-                item.setPickUpDelay(0);
-                level.addFreshEntity(item);
-            }
+            ItemEntity item = new ItemEntity(level, dropPos.x, dropPos.y, dropPos.z, copy);
+            item.setPickUpDelay(0);
+            level.addFreshEntity(item);
         }
     }
 

@@ -24,16 +24,7 @@ import java.util.List;
 public class TaskExpertMixin {
 
     @Unique
-    private static boolean yzzzfix$questDataChecked;
-    @Unique
-    private static boolean yzzzfix$questDataReady;
-
-    @Unique
     private static boolean yzzzfix$isQuestDataReady() {
-        if (yzzzfix$questDataChecked) {
-            return yzzzfix$questDataReady;
-        }
-        yzzzfix$questDataChecked = true;
         try {
             Class<?> clientQuestFile = Class.forName("dev.ftb.mods.ftbquests.client.ClientQuestFile");
             Field instanceField = clientQuestFile.getDeclaredField("INSTANCE");
@@ -43,11 +34,10 @@ public class TaskExpertMixin {
             Field teamDataField = clientQuestFile.getDeclaredField("selfTeamData");
             Object teamData = teamDataField.get(file);
             if (teamData == null) return false;
-            yzzzfix$questDataReady = !(boolean) teamData.getClass().getMethod("isLocked").invoke(teamData);
+            return !(boolean) teamData.getClass().getMethod("isLocked").invoke(teamData);
         } catch (Exception e) {
-            yzzzfix$questDataReady = true;
+            return true;
         }
-        return yzzzfix$questDataReady;
     }
 
     @Inject(method = "getClientQuestCount", at = @At("HEAD"), cancellable = true)
@@ -57,12 +47,12 @@ public class TaskExpertMixin {
         }
     }
 
-    @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "m_7373_", at = @At("HEAD"), cancellable = true)
     private void yzzzfix$safeTooltip(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag, CallbackInfo ci) {
         if (!yzzzfix$isQuestDataReady()) {
-            tooltip.add(Component.translatable("tooltip.crashmodfix.ftbquests.loading")
+            tooltip.add(Component.translatable("tooltip.yzzz_fix.ftbquests.loading")
                     .withStyle(ChatFormatting.YELLOW));
-            tooltip.add(Component.translatable("tooltip.crashmodfix.ftbquests.wait")
+            tooltip.add(Component.translatable("tooltip.yzzz_fix.ftbquests.wait")
                     .withStyle(ChatFormatting.GRAY));
             ci.cancel();
         }

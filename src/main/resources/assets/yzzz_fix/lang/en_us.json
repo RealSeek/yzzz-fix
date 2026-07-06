@@ -1,4 +1,6 @@
 {
   "yzzzfix.elementalcombat.tooltip.attack": "Attack:",
-  "yzzzfix.elementalcombat.tooltip.defense": "Defense:"
+  "yzzzfix.elementalcombat.tooltip.defense": "Defense:",
+  "tooltip.yzzz_fix.ftbquests.loading": "FTB Quests data is syncing",
+  "tooltip.yzzz_fix.ftbquests.wait": "Please wait before checking Task Expert bonuses"
 }
