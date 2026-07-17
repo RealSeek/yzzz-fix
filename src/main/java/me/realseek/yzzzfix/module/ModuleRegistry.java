@@ -6,6 +6,7 @@ import me.realseek.yzzzfix.module.eidolon_jei.EidolonJeiModule;
 import me.realseek.yzzzfix.module.forbidden_arcanus.ForbiddenArcanusModule;
 import me.realseek.yzzzfix.module.immortalers_delight.ImmortalersDelightModule;
 import me.realseek.yzzzfix.module.cy3_core.CY3CoreModule;
+import me.realseek.yzzzfix.module.enigmaticaddons.EnigmaticAddonsModule;
 import me.realseek.yzzzfix.module.lychee_offhand.LycheeOffhandModule;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -79,6 +80,7 @@ public final class ModuleRegistry {
             module("eidolon_hearts", "Eidolon Hearts Fix", "eidolon_hearts_fix", List.of("eidolon")),
             module("goety", "Goety Fix", "goety_fix", List.of("goety")),
             module("malum", "Malum Fix", "malum_fix", List.of("malum")),
+            module("malum_trinkets", "Malum Trinkets Spirit Drop Fix", "malum_trinkets_spirit_drop_fix", List.of("malum_trinkets")),
             module(
                     "celestial_forge",
                     "Celestial Forge Fix",
@@ -100,6 +102,8 @@ public final class ModuleRegistry {
             module("moonstone", "Moonstone Fix", "moonstone_fix", List.of("moonstone")),
             module("slashbladeresharped", "SlashBlade SSS Fix", "slashbladeresharped_fix", List.of("slashblade")),
             module("magnet_fix", "Magnet Throw Filter", "magnet_fix", List.of()),
+            module("enigmaticaddons", "Enigmatic Addons Fix", "enigmaticaddons_fix", List.of("enigmaticlegacy"),
+                    List.of("auviotre.enigmatic.addon.proxy.ClientProxy"), EnigmaticAddonsModule.INSTANCE),
             module(
                     "farmingforblockheads",
                     "Farming for Blockheads Fix",
@@ -147,7 +151,7 @@ public final class ModuleRegistry {
             module("majruszsdifficulty", "Majrusz's Difficulty Fix", "majruszsdifficulty_fix", List.of("majruszsdifficulty")),
             module("sunspirit", "Sun Spirit Balance Fix", "sunspirit_fix", List.of("aether")),
             module("crockpot", "Crockpot Double Crop Fix", "crockpot_fix", List.of("crockpot")),
-            module("gateways", "Gateways Wave Entity Fix", "gateways_fix", List.of("gateways"))
+            module("inventoryprofilesnext", "Inventory Profiles Next Continuous Crafting Fix", "inventoryprofilesnext_continuous_crafting_fix", List.of("inventoryprofilesnext"))
             );
 
     private ModuleRegistry() {
