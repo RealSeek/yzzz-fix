@@ -130,6 +130,14 @@ public final class ModuleRegistry {
                     ModuleRuntimeHooks.NOOP
             ),
             module("refinedstorage", "Refined Storage JEI Fix", "refinedstorage_fix", List.of("refinedstorage")),
+            module(
+                    "modernui",
+                    "Modern UI Client Fix",
+                    "modernui_client_fix",
+                    List.of("modernui"),
+                    List.of("icyllis.arc3d.granite.GraniteDevice"),
+                    ModuleRuntimeHooks.NOOP
+            ),
             module("ak", "AK Inventory Fix", "ak_fix", List.of("ak")),
             module("reliquary_fertile", "Reliquary Fertile Lilypad Fix", "reliquary_fertile_fix", List.of("reliquary")),
             module("minecraft", "LivingEntity & GoalSelector Fix", "LivingEntity_and_GoalSelector_Fix", List.of("minecraft")),
@@ -152,7 +160,7 @@ public final class ModuleRegistry {
     public static LinkedHashMap<String, Boolean> defaultConfigValues() {
         LinkedHashMap<String, Boolean> defaults = new LinkedHashMap<>();
         for (ModuleDefinition module : MODULES) {
-            defaults.put(module.configKey(), true);
+            defaults.put(module.configKey(), !"modernui_client_fix".equals(module.configKey()));
         }
         return defaults;
     }

@@ -66,6 +66,7 @@ dependencies {
                     'Lychee-1.20.1-forge-5.1.14.jar',
                     'mowziesmobs-1.7.3.jar',
                     'Apotheosis-1.20.1-7.4.3.jar',
+                    'ModernUI-Forge-1.20.1-3.11.1.6-universal.jar',
                     'immortalers_delight-1.20.1-forge-1.1.1.jar',
                     'goety-2.5.46.3.jar',
                     'touhoulittlemaid_spell-1.6.3.4-forge+mc1.20.1.jar',
@@ -84,6 +85,7 @@ dependencies {
     compileOnly fg.deobf(files('libs/Lychee-1.20.1-forge-5.1.14.jar'))
     compileOnly fg.deobf(files("libs/mowziesmobs-1.7.3.jar"))
     compileOnly fg.deobf(files("libs/Apotheosis-1.20.1-7.4.3.jar"))
+    compileOnly fg.deobf(files("libs/ModernUI-Forge-1.20.1-3.11.1.6-universal.jar"))
     compileOnly fg.deobf(files("libs/immortalers_delight-1.20.1-forge-1.1.1.jar"))
     compileOnly fg.deobf(files("libs/goety-2.5.46.3.jar"))
     compileOnly fg.deobf(files("libs/touhoulittlemaid_spell-1.6.3.4-forge+mc1.20.1.jar"))
