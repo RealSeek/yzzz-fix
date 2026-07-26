@@ -51,7 +51,6 @@
     "goety.SEHelperMixin",
     "goety.SoulCandlestickBlockEntityMixin",
     "goety.SoulMultiplyMixin",
-    "gateways.GatewayEntityMixin",
     "illager_additions.BlastionerMarkProjectileMixin",
     "immortalers_delight.EnchantalCoolerBlockEntityMixin",
     "immortalers_delight.EnchantalCoolerSerializerMixin",
