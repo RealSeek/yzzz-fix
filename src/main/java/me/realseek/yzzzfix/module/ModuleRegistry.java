@@ -80,6 +80,7 @@ public final class ModuleRegistry {
             module("eidolon_hearts", "Eidolon Hearts Fix", "eidolon_hearts_fix", List.of("eidolon")),
             module("goety", "Goety Fix", "goety_fix", List.of("goety")),
             module("malum", "Malum Fix", "malum_fix", List.of("malum")),
+            module("malum_trinkets", "Malum Trinkets Spirit Drop Fix", "malum_trinkets_spirit_drop_fix", List.of("malum_trinkets")),
             module(
                     "celestial_forge",
                     "Celestial Forge Fix",
@@ -150,7 +151,7 @@ public final class ModuleRegistry {
             module("majruszsdifficulty", "Majrusz's Difficulty Fix", "majruszsdifficulty_fix", List.of("majruszsdifficulty")),
             module("sunspirit", "Sun Spirit Balance Fix", "sunspirit_fix", List.of("aether")),
             module("crockpot", "Crockpot Double Crop Fix", "crockpot_fix", List.of("crockpot")),
-            module("gateways", "Gateways Wave Entity Fix", "gateways_fix", List.of("gateways"))
+            module("inventoryprofilesnext", "Inventory Profiles Next Continuous Crafting Fix", "inventoryprofilesnext_continuous_crafting_fix", List.of("inventoryprofilesnext"))
             );
 
     private ModuleRegistry() {
