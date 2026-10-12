@@ -151,7 +151,23 @@ public final class ModuleRegistry {
             module("majruszsdifficulty", "Majrusz's Difficulty Fix", "majruszsdifficulty_fix", List.of("majruszsdifficulty")),
             module("sunspirit", "Sun Spirit Balance Fix", "sunspirit_fix", List.of("aether")),
             module("crockpot", "Crockpot Double Crop Fix", "crockpot_fix", List.of("crockpot")),
-            module("inventoryprofilesnext", "Inventory Profiles Next Continuous Crafting Fix", "inventoryprofilesnext_continuous_crafting_fix", List.of("inventoryprofilesnext"))
+            module("inventoryprofilesnext", "Inventory Profiles Next Continuous Crafting Fix", "inventoryprofilesnext_continuous_crafting_fix", List.of("inventoryprofilesnext")),
+            module(
+                    "xtraarrows",
+                    "XtraArrows Life Steal Fix",
+                    "xtraarrows_lifesteal_fix",
+                    List.of("xtraarrows"),
+                    List.of("com.morearrows.lists.backend.ArrowsAPI"),
+                    ModuleRuntimeHooks.NOOP
+            ),
+            module(
+                    "gateways",
+                    "Gateways Entity Unload Exploit Fix",
+                    "gateways_entity_unload_fix",
+                    List.of("gateways"),
+                    List.of("dev.shadowsoffire.gateways.entity.GatewayEntity"),
+                    ModuleRuntimeHooks.NOOP
+            )
             );
 
     private ModuleRegistry() {
