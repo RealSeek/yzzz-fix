@@ -1,31 +1,31 @@
 package me.realseek.yzzzfix.mixin.xtraarrows;
 
+import me.realseek.yzzzfix.module.xtraarrows.LifeStealDamageSource;
+import me.realseek.yzzzfix.module.xtraarrows.LifeStealProjectilePenetrationCompat;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.fml.ModList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-/** 修复XtraArrows 吸血箭来源问题. */
+/** 修正 Xtra Arrows 吸血箭的附加伤害来源。 */
 @Pseudo
 @Mixin(targets = "com.morearrows.lists.backend.ArrowsAPI", remap = false)
 public class ArrowsAPILifeStealMixin {
 
     /**
-     * XtraArrows 将受伤实体作为直接实体传递给 indirectMagic。
-     * 保留原始伤害类型和攻击实体，但将箭矢标识为直接实体，
-     * 以便伤害造成实体能够与 Champions 及其他伤害来源实体正常工作。
+     * 原版把受击者作为直接伤害来源，导致 Champions 触发受击者自己的进攻词缀。
      */
     @Redirect(
         method = "lifeStealOnHitEntity",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z",
-            remap = true
+            remap = false
         ),
         remap = false
     )
@@ -36,13 +36,10 @@ public class ArrowsAPILifeStealMixin {
         AbstractArrow abstractArrow,
         EntityHitResult entityHitResult
     ) {
-        Entity directEntity = abstractArrow;
-        Entity causingEntity = originalSource.getEntity();
-        DamageSource correctedSource = new DamageSource(
-            originalSource.typeHolder(),
-            directEntity,
-            causingEntity
-        );
-        return livingHit.hurt(correctedSource, amount);
+        LifeStealDamageSource source = new LifeStealDamageSource(originalSource, abstractArrow);
+        if (ModList.get().isLoaded("projectile_immune_penetration") && !livingHit.level().isClientSide()) {
+            return LifeStealProjectilePenetrationCompat.hurt(livingHit, source, amount);
+        }
+        return livingHit.hurt(source, amount);
     }
 }
