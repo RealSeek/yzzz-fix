@@ -24,3 +24,5 @@ desktop.ini
 
 # Decompiled/reference classes
 org/
+# 本地开发约束文件，保留在工作区而不提交
+/AGENTS.md

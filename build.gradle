@@ -96,6 +96,12 @@ dependencies {
     compileOnly fg.deobf(files("libs/pmmo-1.20.1-1.6.33.jar"))
     compileOnly fg.deobf(files("libs/pmmo_repair-1.20.1-1.5-SNAPSHOT.jar"))
 
+    def goetyIronLibs = file(findProperty('goety_iron_libs') ?: '../rs_integration-master/libs')
+    compileOnly fileTree(dir: goetyIronLibs, include: [
+            'goety_iron-1.1.1.jar',
+            'irons_spellbooks-1.20.1-3.4.0.9.jar'
+    ])
+
     compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 
