@@ -79,6 +79,7 @@ public final class ModuleRegistry {
             module("endinglib", "EndingLib Fix", "endinglib_fix", List.of("endinglib")),
             module("eidolon_hearts", "Eidolon Hearts Fix", "eidolon_hearts_fix", List.of("eidolon")),
             module("goety", "Goety Fix", "goety_fix", List.of("goety")),
+            module("goety_iron", "Goety Iron Servant Summoning Fix", "goety_iron_fix", List.of("goety_iron")),
             module("malum", "Malum Fix", "malum_fix", List.of("malum")),
             module("malum_trinkets", "Malum Trinkets Spirit Drop Fix", "malum_trinkets_spirit_drop_fix", List.of("malum_trinkets")),
             module(
