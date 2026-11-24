@@ -67,6 +67,14 @@ public final class ModuleRegistry {
             module("aetherworks", "Aetherworks Fix", "aetherworks_fix", List.of()),
             module("apotheosis_gateway", "Apotheosis Gateway Fix", "apotheosis_gateway_fix", List.of("apotheosis")),
             module("apotheosis_spawner", "Apothic Spawners Fix", "apotheosis_spawner_fix", List.of("apotheosis")),
+            module(
+                    "apotheosis_loot",
+                    "Wearable Skull Affix Fix",
+                    "apotheosis_loot_fix",
+                    List.of("apotheosis"),
+                    List.of("dev.shadowsoffire.apotheosis.adventure.loot.LootCategory"),
+                    ModuleRuntimeHooks.NOOP
+            ),
             module("reliquary_lyssa", "Reliquary Lyssa Fix", "reliquary_lyssa_fix", List.of("reliquary")),
             module("eidolon_jei", "Eidolon JEI Fix", "eidolon_jei_fix", List.of("eidolon"), List.of(), EidolonJeiModule.INSTANCE),
             module("null_blockstate", "Null BlockState Fix", "null_blockstate_fix", List.of(), List.of(), ModuleRuntimeHooks.NOOP),

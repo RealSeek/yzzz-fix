@@ -10,6 +10,7 @@
     "ak.LazyOptionalNullFix",
     "ancient_ones.AmethystColossusEntityMixin",
     "apotheosis_gateway.BossWaveEntityMixin",
+    "apotheosis_loot.LootCategoryMixin",
     "apotheosis_spawner.ApothSpawnerTileMixin",
     "apotheosis_spawner.MowzieEntityMixin",
     "apotheosis_spawner.SpawnerShortStatMixin",
