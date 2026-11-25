@@ -101,6 +101,14 @@ public final class ModuleRegistry {
             module("aquamirae", "Aquamirae Pouch Fix", "aquamirae_pouch_fix", List.of("aquamirae")),
             module("depthcrawler", "Depthcrawler Fix", "depthcrawler_fix", List.of("depthcrawler")),
             module("moonstone", "Moonstone Fix", "moonstone_fix", List.of("moonstone")),
+            module(
+                    "mowzies_blowgun",
+                    "Mowzie's Blowgun Dart Speed",
+                    "mowzies_blowgun_speed_fix",
+                    List.of("mowziesmobs"),
+                    List.of("com.bobmowzie.mowziesmobs.server.item.ItemBlowgun"),
+                    ModuleRuntimeHooks.NOOP
+            ),
             module("slashbladeresharped", "SlashBlade SSS Fix", "slashbladeresharped_fix", List.of("slashblade")),
             module("magnet_fix", "Magnet Throw Filter", "magnet_fix", List.of()),
             module("enigmaticaddons", "Enigmatic Addons Fix", "enigmaticaddons_fix", List.of("enigmaticlegacy"),

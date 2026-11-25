@@ -1,3 +1,7 @@
+## Unreleased
+
+- 将莫伊泽生物吹筒（Mowzie's Mobs Blowgun）发射吹标的速度倍率从 1.1 提高到 3.0（配置键 `mowzies_blowgun_speed_fix`，可在配置中关闭）.
+
 ## 26.7.6
 
 - 修复魔法石英花在玩家重生后自动关闭导致不会提供正面效果的问题.

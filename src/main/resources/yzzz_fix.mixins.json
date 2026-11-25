@@ -80,6 +80,7 @@
     "moonstone.BloodEntityMixin",
     "moonstone.BloodMagicBoxMixin",
     "moonstone.DeceasedContractMixin",
+    "mowzies_blowgun.ItemBlowgunMixin",
     "mutant_monsters.HurtByNearestTargetGoalMixin",
     "null_blockstate.LevelMixin",
     "refinedstorage.CraftingGridBehaviorMixin",
