@@ -1,6 +1,7 @@
 ## Unreleased
 
 - 修复突变骷髅头（Mutant Monsters）作为可穿戴头盔时无法获得神化词缀、也无法通过锻造获得宝石槽位的问题（神化会把所有骷髅方块物品从战利品类型里排除）.
+- 将莫伊泽生物吹筒（Mowzie's Mobs Blowgun）发射吹标的速度倍率从 1.1 提高到 3.0（配置键 `mowzies_blowgun_speed_fix`，可在配置中关闭）.
 
 ## 26.7.6
 
