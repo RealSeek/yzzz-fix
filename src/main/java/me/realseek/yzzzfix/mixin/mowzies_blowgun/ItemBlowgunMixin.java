@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  *
  * <p>目标方法 {@code ItemBlowgun#releaseUsing}（生产环境 SRG 名 {@code m_5551_}）在
  * 服务端生成 {@code EntityDart} 时调用
- * {@code AbstractArrow#shoot(Entity, float, float, float, float, float)}，
+ * {@code AbstractArrow#shootFromRotation(Entity, float, float, float, float, float)}，
  * 其中第五个参数（初速度）直接写成 {@code getArrowVelocity(charge) * 1.1F}。
  * 满蓄力时 {@code getArrowVelocity} 返回 1.0，因此吹标初速度上限仅为 1.1，
  * 远低于原版弓满蓄力的 3.0。</p>
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class ItemBlowgunMixin {
 
     @ModifyConstant(
-            method = "m_5551_",
+            method = {"releaseUsing", "m_5551_"},
             constant = @Constant(floatValue = 1.1F),
             remap = false
     )
